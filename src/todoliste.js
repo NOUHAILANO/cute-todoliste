@@ -112,77 +112,148 @@ function Todoliste() {
           <div className="col-8 col-sm-9">
             <input
               type="text"
-              className="form-control rounded-pill"
+              className="form-control rounded-pill border-0 shadow-sm"
               placeholder="Add a new task ✨"
               value={newtask}
               onChange={(e) => setnewtask(e.target.value)}
+              style={{
+                background: "rgba(255,255,255,0.8)",
+                padding: "12px 20px",
+              }}
             />
           </div>
           <div className="col-4 col-sm-3">
             <button
-              className="btn w-100 rounded-pill"
-              style={{ backgroundColor: "#ff69b4", color: "white" }}
+              className="btn w-100 rounded-pill fw-bold shadow-sm border-0"
+              style={{
+                background: "linear-gradient(45deg, #ff6b9d, #ff8fab)",
+                color: "white",
+                padding: "12px 0",
+                fontSize: "16px",
+                transition: "all 0.3s",
+              }}
+              onMouseOver={(e) => e.target.style.transform = "scale(1.05)"}
+              onMouseOut={(e) => e.target.style.transform = "scale(1)"}
               onClick={addtask}
             >
-              Add
+              🌟 Add
             </button>
           </div>
         </div>
 
         {loading ? (
-          <p className="text-center text-muted">Loading tasks...</p>
+          <div className="text-center">
+            <div className="spinner-border text-pink" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+            <p className="mt-2" style={{ color: "#ff69b4" }}>
+              Loading cute tasks...
+            </p>
+          </div>
         ) : (
           <ul
-            className="list-group list-group-flush overflow-auto"
+            className="list-group list-group-flush overflow-auto p-2"
             style={{ maxHeight: "50vh" }}
           >
             {tasks.map((t) => (
-              <li key={t.id} className="list-group-item rounded-4 mb-3">
+              <li
+                key={t.id}
+                className="list-group-item rounded-4 mb-3 border-0 shadow-sm"
+                style={{
+                  background: "rgba(255,255,255,0.7)",
+                  borderLeft: `5px solid ${t.completed ? "#98fb98" : "#ffb6c1"}`,
+                }}
+              >
                 {editid === t.id ? (
-                  <>
+                  <div className="d-flex flex-column gap-2">
                     <input
-                      className="form-control mb-2"
+                      className="form-control rounded-pill border-0 shadow-sm"
                       value={newtitle}
                       onChange={(e) => setnewtitle(e.target.value)}
+                      style={{
+                        background: "rgba(255,255,255,0.9)",
+                        padding: "10px 15px",
+                      }}
                     />
                     <button
-                      className="btn btn-success btn-sm"
+                      className="btn rounded-pill fw-bold border-0 shadow-sm"
+                      style={{
+                        background: "linear-gradient(45deg, #5dff9d, #00e6a9)",
+                        color: "white",
+                        padding: "8px 20px",
+                        transition: "all 0.3s",
+                      }}
+                      onMouseOver={(e) => e.target.style.transform = "scale(1.05)"}
+                      onMouseOut={(e) => e.target.style.transform = "scale(1)"}
                       onClick={saveedit}
                     >
-                      Save
+                      💾 Save
                     </button>
-                  </>
+                  </div>
                 ) : (
                   <>
-                    <span
-                      style={{
-                        textDecoration: t.completed ? "line-through" : "none",
-                        color: t.completed ? "#999" : "#d63384",
-                      }}
-                    >
-                      {t.title}
-                    </span>
+                    <div className="d-flex align-items-start mb-2">
+                      <span
+                        className="flex-grow-1"
+                        style={{
+                          textDecoration: t.completed ? "line-through" : "none",
+                          color: t.completed ? "#999" : "#d63384",
+                          fontSize: "16px",
+                          fontWeight: "500",
+                        }}
+                      >
+                        {t.completed ? "✅ " : "📝 "}
+                        {t.title}
+                      </span>
+                    </div>
 
-                    <div className="d-flex gap-2 mt-2">
+                    <div className="d-flex gap-2">
                       <button
-                        className="btn btn-sm btn-warning"
+                        className="btn rounded-pill flex-fill fw-bold border-0 shadow-sm"
+                        style={{
+                          background: "linear-gradient(45deg, #ffd166, #ffb347)",
+                          color: "white",
+                          padding: "8px 15px",
+                          fontSize: "14px",
+                          transition: "all 0.3s",
+                        }}
+                        onMouseOver={(e) => e.target.style.transform = "scale(1.05)"}
+                        onMouseOut={(e) => e.target.style.transform = "scale(1)"}
                         onClick={() => startedit(t)}
                       >
-                        Edit
+                        ✏️ Edit
                       </button>
                       <button
-                        className="btn btn-sm btn-danger"
+                        className="btn rounded-pill flex-fill fw-bold border-0 shadow-sm"
+                        style={{
+                          background: "linear-gradient(45deg, #ff6b6b, #ff8e8e)",
+                          color: "white",
+                          padding: "8px 15px",
+                          fontSize: "14px",
+                          transition: "all 0.3s",
+                        }}
+                        onMouseOver={(e) => e.target.style.transform = "scale(1.05)"}
+                        onMouseOut={(e) => e.target.style.transform = "scale(1)"}
                         onClick={() => deletetask(t.id)}
                       >
-                        Delete
+                        🗑️ Delete
                       </button>
                       <button
-                        className={`btn btn-sm ${
-                          t.completed ? "btn-outline-success" : "btn-success"
-                        }`}
+                        className="btn rounded-pill flex-fill fw-bold border-0 shadow-sm"
+                        style={{
+                          background: t.completed 
+                            ? "linear-gradient(45deg, #a8e6cf, #dcedc1)"
+                            : "linear-gradient(45deg, #84fab0, #8fd3f4)",
+                          color: t.completed ? "#555" : "white",
+                          padding: "8px 15px",
+                          fontSize: "14px",
+                          transition: "all 0.3s",
+                        }}
+                        onMouseOver={(e) => e.target.style.transform = "scale(1.05)"}
+                        onMouseOut={(e) => e.target.style.transform = "scale(1)"}
                         onClick={() => toggleDone(t)}
                       >
-                        {t.completed ? "Undone" : "Done"}
+                        {t.completed ? "↩️ Undo" : "✓ Done"}
                       </button>
                     </div>
                   </>
@@ -190,6 +261,15 @@ function Todoliste() {
               </li>
             ))}
           </ul>
+        )}
+
+        {!loading && tasks.length === 0 && (
+          <div className="text-center mt-4">
+            <div style={{ fontSize: "48px" }}>📝</div>
+            <p style={{ color: "#ff69b4", fontWeight: "500" }}>
+              No tasks yet! Add your first cute task!
+            </p>
+          </div>
         )}
       </div>
     </div>
