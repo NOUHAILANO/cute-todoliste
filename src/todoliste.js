@@ -8,7 +8,7 @@ function Todoliste() {
 
   // FETCH TASKS
   useEffect(() => {
-    fetch("http://localhost:3001/tasks")
+    fetch("https://6967a08ebbe157c088b28cd8.mockapi.io/tasks")
       .then((res) => res.json())
       .then((data) => settasks(data));
   }, []);
@@ -16,7 +16,7 @@ function Todoliste() {
   // ADD TASK
   const addtask = () => {
     if (newtask.trim() === "") return;
-    fetch("http://localhost:3001/tasks", {
+    fetch("https://6967a08ebbe157c088b28cd8.mockapi.io/tasks", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title: newtask, completed: false }),
@@ -36,11 +36,10 @@ function Todoliste() {
 
   // SAVE EDIT
   const saveedit = () => {
-    fetch(`http://localhost:3001/tasks/${editid}`, {
+    fetch(`https://6967a08ebbe157c088b28cd8.mockapi.io/tasks/${editid}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        id: editid,
         title: newtitle,
         completed: tasks.find((t) => t.id === editid)?.completed,
       }),
@@ -55,14 +54,14 @@ function Todoliste() {
 
   // DELETE TASK
   const deletetask = (id) => {
-    fetch(`http://localhost:3001/tasks/${id}`, { method: "DELETE" }).then(() =>
-      settasks(tasks.filter((t) => t.id !== id))
-    );
+    fetch(`https://6967a08ebbe157c088b28cd8.mockapi.io/tasks/${id}`, {
+      method: "DELETE",
+    }).then(() => settasks(tasks.filter((t) => t.id !== id)));
   };
 
   // TOGGLE DONE
   const toggleDone = (task) => {
-    fetch(`http://localhost:3001/tasks/${task.id}`, {
+    fetch(`https://6967a08ebbe157c088b28cd8.mockapi.io/tasks/${task.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...task, completed: !task.completed }),
@@ -91,20 +90,12 @@ function Todoliste() {
           border: "2px solid rgba(255,255,255,0.4)",
         }}
       >
-        {/* HEADER */}
         <div className="text-center mb-3">
-          <h2
-            className="fw-bold"
-            style={{
-              color: "#ff4da6",
-              textShadow: "0 2px 10px rgba(255,77,166,0.4)",
-            }}
-          >
+          <h2 className="fw-bold" style={{ color: "#ff4da6" }}>
             🌸 My Cute Todo
           </h2>
         </div>
 
-        {/* INPUT */}
         <div className="row g-2 mb-3">
           <div className="col-8 col-sm-9">
             <input
@@ -118,11 +109,7 @@ function Todoliste() {
           <div className="col-4 col-sm-3">
             <button
               className="btn w-100 rounded-pill"
-              style={{
-                backgroundColor: "#ff69b4",
-                color: "white",
-                fontWeight: "bold",
-              }}
+              style={{ backgroundColor: "#ff69b4", color: "white" }}
               onClick={addtask}
             >
               Add
@@ -130,28 +117,9 @@ function Todoliste() {
           </div>
         </div>
 
-        {/* EMPTY STATE */}
-        {tasks.length === 0 && (
-          <p className="text-center mt-4" style={{ color: "#d63384" }}>
-            🌸 No tasks yet… add something cute!
-          </p>
-        )}
-
-        {/* TASK LIST */}
-        <ul
-          className="list-group list-group-flush overflow-auto"
-          style={{ maxHeight: "50vh" }}
-        >
+        <ul className="list-group list-group-flush overflow-auto" style={{ maxHeight: "50vh" }}>
           {tasks.map((t) => (
-            <li
-              key={t.id}
-              className="list-group-item rounded-4 mb-3"
-              style={{
-                background: "rgba(255,255,255,0.7)",
-                boxShadow: "0 8px 20px rgba(255,105,180,0.25)",
-                border: "1px solid rgba(255,105,180,0.3)",
-              }}
-            >
+            <li key={t.id} className="list-group-item rounded-4 mb-3">
               {editid === t.id ? (
                 <>
                   <input
@@ -159,55 +127,35 @@ function Todoliste() {
                     value={newtitle}
                     onChange={(e) => setnewtitle(e.target.value)}
                   />
-                  <div className="d-flex gap-2">
-                    <button
-                      className="btn btn-success btn-sm rounded-pill"
-                      onClick={saveedit}
-                    >
-                      Save
-                    </button>
-                    <button
-                      className="btn btn-secondary btn-sm rounded-pill"
-                      onClick={() => seteditid(null)}
-                    >
-                      Cancel
-                    </button>
-                  </div>
+                  <button className="btn btn-success btn-sm" onClick={saveedit}>
+                    Save
+                  </button>
                 </>
               ) : (
                 <>
                   <span
                     style={{
-                      fontSize: "clamp(14px, 2.5vw, 16px)",
-                      fontWeight: "600",
                       textDecoration: t.completed ? "line-through" : "none",
                       color: t.completed ? "#999" : "#d63384",
-                      wordBreak: "break-word",
                     }}
                   >
                     {t.title}
                   </span>
 
-                  <div className="d-flex flex-wrap justify-content-end gap-2 mt-2">
-                    <button
-                      className="btn btn-sm btn-outline-warning rounded-pill"
-                      onClick={() => startedit(t)}
-                    >
-                      ✏️ Edit
+                  <div className="d-flex gap-2 mt-2">
+                    <button className="btn btn-sm btn-warning" onClick={() => startedit(t)}>
+                      Edit
+                    </button>
+                    <button className="btn btn-sm btn-danger" onClick={() => deletetask(t.id)}>
+                      Delete
                     </button>
                     <button
-                      className="btn btn-sm btn-outline-danger rounded-pill"
-                      onClick={() => deletetask(t.id)}
-                    >
-                      🗑 Delete
-                    </button>
-                    <button
-                      className={`btn btn-sm rounded-pill ${
+                      className={`btn btn-sm ${
                         t.completed ? "btn-outline-success" : "btn-success"
                       }`}
                       onClick={() => toggleDone(t)}
                     >
-                      {t.completed ? "↩ Undone" : "✔ Done"}
+                      {t.completed ? "Undone" : "Done"}
                     </button>
                   </div>
                 </>
